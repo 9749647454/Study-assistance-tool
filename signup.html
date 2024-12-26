@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="signup.css">
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="homepage-btn">Homepage</a>
+    </div>
+    <div class="container">
+        <h1>User Registration</h1>
+        <form id="registrationForm">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="login.html">Log In</a></p>
+    </div>
+
+    <script>
+        // Handling the form submission with JavaScript
+        document.getElementById('registrationForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the form from reloading the page
+    
+            // Collect form data
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+    
+            // Send data to the backend using fetch
+            try {
+                const response = await fetch('/api/auth/signup', { // Use relative URL
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+    
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Registration successful!');  // Inform user of successful registration
+                    window.location.href = 'login.html'; // Redirect to login page
+                } else {
+                    alert(`Registration failed: ${data.msg}`); // Show error message
+                }
+            } catch (error) {
+                console.error('Error during registration:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    </script>    
+</body>
+</html>
